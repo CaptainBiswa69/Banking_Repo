@@ -1,5 +1,6 @@
 import 'package:banking_project/handlers/authhandler.dart';
 import 'package:banking_project/screens/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +19,9 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   TextEditingController emailControler = TextEditingController();
   TextEditingController passwordControler = TextEditingController();
+  TextEditingController nameControler = TextEditingController();
+  TextEditingController accountControler = TextEditingController();
+  TextEditingController phoneControler = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -62,6 +66,81 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(
                         height: 30,
+                      ),
+                      Visibility(
+                        visible: provider,
+                        child: TextFormField(
+                          controller: nameControler,
+                          decoration: const InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2)),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)),
+                              hintText: 'Enter Your Name',
+                              labelText: 'Name',
+                              labelStyle: TextStyle(color: Colors.blue),
+                              prefixIcon: Icon(
+                                Icons.person_2,
+                                color: Colors.green,
+                              ),
+                              hintStyle: TextStyle(color: Colors.white60),
+                              errorStyle: TextStyle(color: Colors.red)),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Visibility(
+                        visible: provider,
+                        child: TextFormField(
+                          controller: accountControler,
+                          decoration: const InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2)),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)),
+                              hintText: 'Enter Your Account Number',
+                              labelText: 'Account Number',
+                              labelStyle: TextStyle(color: Colors.blue),
+                              prefixIcon: Icon(
+                                Icons.account_balance,
+                                color: Colors.green,
+                              ),
+                              hintStyle: TextStyle(color: Colors.white60),
+                              errorStyle: TextStyle(color: Colors.red)),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Visibility(
+                        visible: provider,
+                        child: TextFormField(
+                          controller: phoneControler,
+                          decoration: const InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2)),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)),
+                              hintText: 'Enter Your Phone Number',
+                              labelText: 'Phone Number',
+                              labelStyle: TextStyle(color: Colors.blue),
+                              prefixIcon: Icon(
+                                Icons.person_2,
+                                color: Colors.green,
+                              ),
+                              hintStyle: TextStyle(color: Colors.white60),
+                              errorStyle: TextStyle(color: Colors.red)),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
                       ),
                       TextFormField(
                         controller: emailControler,
@@ -113,7 +192,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ? await AuthServices()
                                     .registerUserWithEmailAndPassword(
                                         emailControler.text,
-                                        passwordControler.text)
+                                        passwordControler.text,
+                                        nameControler.text,
+                                        accountControler.text,
+                                        phoneControler.text)
                                 : await AuthServices()
                                     .loginUserWithEmailAndPassword(
                                         emailControler.text,

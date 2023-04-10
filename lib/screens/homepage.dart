@@ -1,6 +1,8 @@
 import 'package:banking_project/screens/card_view.dart';
 import 'package:banking_project/screens/login.dart';
+import 'package:banking_project/screens/transaction.dart';
 import 'package:banking_project/screens/transactions.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +16,39 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
+  String? name;
+  String? phoneNumber;
+  String? accountNumber;
+
+  getData() async {
+    await FirebaseFirestore.instance
+        .collection("UserData")
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((value) {
+      name = value.data()?["Name"];
+      phoneNumber = value.data()?["Account Number"];
+      accountNumber = value.data()?["Phone Number"];
+    });
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("HomePage"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddTransaction()));
+              },
+              icon: const Icon(Icons.add))
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -108,12 +138,12 @@ class _HomePageState extends State<HomePage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadiusDirectional.circular(12),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text("123456"),
-                    subtitle: Text('Account No'),
+                    leading: const Icon(Icons.person),
+                    title: Text(accountNumber ?? "1234567"),
+                    subtitle: const Text('Account No'),
                   ),
                 ),
               ),
@@ -121,12 +151,12 @@ class _HomePageState extends State<HomePage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadiusDirectional.circular(12),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    leading: Icon(Icons.insert_drive_file),
-                    title: Text('knbhasjna67va91'),
-                    subtitle: Text("UserId"),
+                    leading: const Icon(Icons.insert_drive_file),
+                    title: Text(FirebaseAuth.instance.currentUser?.uid ?? ""),
+                    subtitle: const Text("UserId"),
                   ),
                 ),
               ),
@@ -134,12 +164,14 @@ class _HomePageState extends State<HomePage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadiusDirectional.circular(12),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Subhash'),
-                    subtitle: Text("Name"),
+                    leading: const Icon(Icons.person),
+                    title: Text(
+                        FirebaseAuth.instance.currentUser?.displayName ??
+                            "Biswajeet"),
+                    subtitle: const Text("Name"),
                   ),
                 ),
               ),
@@ -147,12 +179,12 @@ class _HomePageState extends State<HomePage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadiusDirectional.circular(12),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    leading: Icon(Icons.call),
-                    title: Text('+91-7004048090'),
-                    subtitle: Text("Phone Number"),
+                    leading: const Icon(Icons.call),
+                    title: Text(phoneNumber ?? "+917008724191"),
+                    subtitle: const Text("Phone Number"),
                   ),
                 ),
               ),

@@ -1,4 +1,3 @@
-import 'package:banking_project/screens/homepage.dart';
 import 'package:banking_project/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: const HomePage(),
+      home: const LoginScreen(),
     );
   }
 }

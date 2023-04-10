@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthServices {
@@ -43,11 +44,20 @@ class AuthServices {
   }
 
   //register
-  registerUserWithEmailAndPassword(String email, String password) async {
+  registerUserWithEmailAndPassword(String email, String password, String name,
+      String accountNmber, String phoneNumber) async {
     try {
       await firebaseauth.createUserWithEmailAndPassword(
           email: email, password: password);
-
+      await firebaseauth.currentUser?.updateDisplayName(name);
+      FirebaseFirestore.instance
+          .collection("UserData")
+          .doc(firebaseauth.currentUser?.uid)
+          .set({
+            "Name" : name,
+            "Account Number" : accountNmber,
+            "Phone Number" : phoneNumber
+          });
       return true;
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
